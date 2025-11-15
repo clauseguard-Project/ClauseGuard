@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class User(models.Model):
+class user(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100)
     email = models.EmailField(max_length=255, unique=True)
@@ -14,7 +14,7 @@ class User(models.Model):
 
 class Contract(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contracts")
+    user = models.ForeignKey(user, on_delete=models.CASCADE, related_name="contracts")
     original_filename = models.CharField(max_length=500)
     file_path = models.CharField(max_length=400)
     uploaded_at = models.DateTimeField(auto_now_add=True)
@@ -73,7 +73,7 @@ class Clause(models.Model):
 class Complaint(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(
-        User,
+        user,
         on_delete=models.CASCADE,
         related_name="complaints"
     )
@@ -89,7 +89,7 @@ class Complaint(models.Model):
 class Feedback(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(
-        User,
+        user,
         on_delete=models.CASCADE,
         related_name="feedbacks"
     )

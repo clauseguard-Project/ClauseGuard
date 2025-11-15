@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_http_methods
+from .forms import RegistrationForm
+from .models import user
 
 # Create your views here.
 def home(request):
@@ -7,8 +11,20 @@ def home(request):
 def login(request):
     return render(request,'login.html')
 
+@require_http_methods(["GET", "POST"])
 def register(request):
-    return render(request,'register.html')
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, 'Registration successful! You can now login.')
+            return redirect('login')
+        else:
+            # Pass form with errors back to template
+            return render(request, 'register.html', {'form': form})
+    else:
+        form = RegistrationForm()
+        return render(request, 'register.html', {'form': form})
 
 def admin_dashboard(request):
     return render(request,'admin.html')
